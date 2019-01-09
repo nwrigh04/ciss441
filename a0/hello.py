@@ -1,5 +1,5 @@
 """
 Date 01/08/2019
 Who Nick W
-Why Simple python code example
+Why Simple example on publishing code
 print("Hello world, my name is Nick.")
