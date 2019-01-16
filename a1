@@ -1,0 +1,34 @@
+import csv
+import json
+
+"""
+who: Nick Wright
+when: 1.15.2019
+what: assignment 1
+"""
+
+chocolate_data = []    # this is to collect data for printing at the very end
+
+chocolate_total_count = 0  # for counting the rows of data
+with open ('flavors_of_cacao.csv', 'r') as csvfile:
+
+    # parse csv file pointer into chocolate_stream
+    chocolate_stream = csv.DictReader(csvfile, delimiter=',', quotechar= '"')
+    
+    #interate over chocolate_stream to process
+    for chocolate_data_row in chocolate_stream:
+        chocolate_total_count = chocolate_total_count + 1
+        chocolate_company = chocolate_data_row['Company']
+        chocalate_name = chocolate_data_row['Specific_Bean_Origin_Bar_Name']
+        chocolate_cocoa_percent = chocolate_data_row['Cocoa_Percent']
+        chocolate_rating = chocolate_data_row['Rating']
+          
+
+        # only show the first 20 rows.
+        if chocolate_total_count <= 20:
+            print(chocolate_total_count, chocolate_company, chocalate_name, chocolate_cocoa_percent, chocolate_rating)
+            chocolate_data.append({chocolate_total_count:[chocolate_company,chocalate_name,chocolate_rating]})
+
+print("I found " + str (chocolate_total_count) + "chocolates!")
+print("I am all done processing data!")
+print(json.dumps(chocolate_data))
