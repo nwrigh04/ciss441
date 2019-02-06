@@ -1,0 +1,87 @@
+import csv
+import sqlite3
+
+
+db_file = 'suicide_statistics.db'
+CSV_FILE = 'who_suicide_statistics.csv'
+conn = sqlite3.connect(db_file)
+
+
+def create_who_suicide_statistics_table():
+    """
+    Here i am creating the table for my data.
+    """
+    c = conn.cursor()
+    sql_str = """
+        create table if not exists suicides (
+        id integer primary key autoincrement,
+        country text,
+        year int,
+        sex text,
+        age text, 
+        suicides_no int,
+        population int
+        );
+        """
+    c.execute(sql_str)
+    conn.commit()
+
+
+def process_csv_file():
+
+    c = conn.cursor()
+
+    with open(CSV_FILE, 'r') as csvfile:
+
+        # parse csv file pointer into suicides_stream
+        suicides_stream = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+
+        # interate over suicides_stream to process. 
+        for r_ct, suicides_data_row in enumerate(suicides_stream):
+
+            country = suicides_data_row['country']
+            year = suicides_data_row['year']
+            sex = suicides_data_row['sex']
+            age = suicides_data_row['age']
+            suicides_no = suicides_data_row['suicides_no']
+            population = suicides_data_row['population']
+            
+            # cleaning up 0 length strings
+            if len(suicides_no.replace(' ',''))==0:
+                suicides_no=0
+            # only show the first 20 rows. 
+            if r_ct <= 100:
+                strsql = """
+                    insert into suicides (country, year, sex, age, suicides_no, population) values (
+                    '{country}',
+                    {year},
+                    '{sex}',
+                    '{age}',
+                    {suicides_no},
+                    {population}
+                    );
+                """.format(
+                    country=country,
+                    year=year,
+                    sex=sex,
+                    age=age,
+                    suicides_no=suicides_no,
+                    population=population
+                )
+                # print(strsql)
+                c.execute(strsql)
+                conn.commit()
+
+            # only show the first 20 rows. 
+            if r_ct <= 10:
+                print(r_ct, country, year, sex, age, suicides_no, population)
+
+
+def main():
+    print('Creating a Suicides DB from a csv file.')
+    create_who_suicide_statistics_table()
+    
+    process_csv_file()
+
+if __name__ == "__main__":
+    main()
