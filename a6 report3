@@ -3,7 +3,7 @@ DB_FILE = 'payroll_dc_small.db'
 conn = sqlite3.connect(DB_FILE)
 
 def main():
-    print('a6 - standard report 1')
+    print('a6 - standard report 3')
     strsql = """select WORKSTATT, max(salary), min(salary), max(los), min(los), count(salary), employment
 from factdata_mar2016, wkstat
 where factdata_mar2016.WORKSTAT = wkstat.WORKSTAT
