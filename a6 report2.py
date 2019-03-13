@@ -15,7 +15,7 @@ def main():
                 from factdata_mar2016, super
                 where factdata_mar2016.supervis = super.supervis
                 group by supervist
-                order by los_avg asc;
+                order by los_avg asc
                 limit 20;
             
         """
